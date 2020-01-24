@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm-run-all dev:** && npm-run-all -p dev:watch:**",
+    "dev:clean": "rimraf ./public/**",
+    "dev:js": "webpack",
+    "dev:pug": "pug \"./src/pug/index.pug\" --out ./public/",
+    "dev:scss": "node-sass ./src/scss/style.scss ./public/style.css",
+    "dev:watch:browse": "browser-sync start --server \"./public\" --https true --watch --files \"./src/**\"",
+    "dev:watch:js": "onchange \"./src/js/**/*.js\" -- npm run dev:js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +23,20 @@
   },
   "homepage": "https://github.com/yu-smc/drifting-stars#readme",
   "devDependencies": {
-    "browser-sync": "^2.26.7"
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "browser-sync": "^2.26.7",
+    "cpx": "^1.5.0",
+    "node-sass": "^4.13.1",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^6.1.0",
+    "pug": "^2.0.4",
+    "pug-cli": "^1.0.0-alpha6",
+    "rimraf": "^3.0.0",
+    "sass": "^1.25.0",
+    "three": "^0.112.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
