@@ -90,10 +90,23 @@
 /*!*************************!*\
   !*** ./src/js/entry.js ***!
   \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("var stage = document.getElementById('stage');\nvar scene;\nvar camera;\nvar renderer;\n\nvar init = function init() {\n  scene = new THREE.Scene();\n  renderer = new THREE.WebGLRenderer();\n  renderer.setClearColor(0x001738);\n  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);\n  camera.position.set(0, 0, 10);\n  onResize();\n  stage.appendChild(renderer.domElement);\n  render();\n};\n\nvar onResize = function onResize() {\n  var width = window.innerWidth;\n  var height = window.innerHeight;\n  renderer.setPixelRatio(window.devicePixelRatio);\n  renderer.setSize(width, height);\n  camera.aspect = width / height;\n  camera.updateProjectionMatrix();\n};\n\nvar render = function render() {\n  console.log(\"aa\");\n  renderer.render(scene, camera);\n  requestAnimationFrame(render);\n};\n\nwindow.onload = function () {\n  init();\n};\n\nwindow.addEventListener('resize', onResize);\n\n//# sourceURL=webpack:///./src/js/entry.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _modules_shaders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/shaders */ \"./src/js/modules/shaders.js\");\n\nvar stage = document.getElementById('stage');\nvar scene;\nvar camera;\nvar renderer;\n\nvar init = function init() {\n  scene = new THREE.Scene();\n  renderer = new THREE.WebGLRenderer();\n  renderer.setClearColor(0x001738);\n  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);\n  camera.position.set(0, 0, 10);\n  onResize();\n  stage.appendChild(renderer.domElement);\n  initStars();\n  render();\n};\n\nvar onResize = function onResize() {\n  var width = window.innerWidth;\n  var height = window.innerHeight;\n  renderer.setPixelRatio(window.devicePixelRatio);\n  renderer.setSize(width, height);\n  camera.aspect = width / height;\n  camera.updateProjectionMatrix();\n};\n\nvar initStars = function initStars() {\n  var geo = new THREE.BufferGeometry();\n  var mat = new THREE.ShaderMaterial({\n    uniforms: {\n      time: {\n        type: \"f\",\n        value: 0.0\n      }\n    },\n    vertexShader: _modules_shaders__WEBPACK_IMPORTED_MODULE_0__[\"vShader\"],\n    fragmentShader: _modules_shaders__WEBPACK_IMPORTED_MODULE_0__[\"fShader\"],\n    depthWrite: false,\n    transparent: true,\n    alphaTest: 0.5\n  });\n};\n\nvar render = function render() {\n  animate();\n  renderer.render(scene, camera);\n  requestAnimationFrame(render);\n};\n\nvar animate = function animate() {//main logic\n};\n\nwindow.onload = function () {\n  init();\n};\n\nwindow.addEventListener('resize', onResize);\n\n//# sourceURL=webpack:///./src/js/entry.js?");
+
+/***/ }),
+
+/***/ "./src/js/modules/shaders.js":
+/*!***********************************!*\
+  !*** ./src/js/modules/shaders.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  vShader: \"\",\n  fShader: \"\"\n});\n\n//# sourceURL=webpack:///./src/js/modules/shaders.js?");
 
 /***/ })
 

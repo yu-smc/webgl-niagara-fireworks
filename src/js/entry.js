@@ -1,3 +1,9 @@
+import {
+  vShader,
+  fShader
+} from './modules/shaders'
+
+
 const stage = document.getElementById('stage')
 let scene;
 let camera;
@@ -15,7 +21,8 @@ const init = () => {
 
   stage.appendChild(renderer.domElement)
 
-  render()
+  initStars();
+  render();
 }
 
 const onResize = () => {
@@ -27,6 +34,29 @@ const onResize = () => {
 
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+}
+
+const initStars = () => {
+  const geo = new THREE.BufferGeometry()
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      time: {
+        type: "f",
+        value: 0.0
+      },
+    },
+    vertexShader: vShader,
+    fragmentShader: fShader,
+    depthWrite: false,
+    transparent: true,
+    alphaTest: 0.5,
+  });
+
+  const stars = new THREE.THREE.Points(geo, mat);
+
+  scene.add(stars)
+
+
 }
 
 const render = () => {
