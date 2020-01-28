@@ -1,4 +1,6 @@
-const Shader = require('./modules/shaders')
+import Shader from './modules/shaders'
+
+console.log(Shader.fragment)
 
 
 const stage = document.getElementById('stage')
@@ -34,7 +36,25 @@ const onResize = () => {
 }
 
 const initStars = () => {
+  const amount = 500;
   const geo = new THREE.BufferGeometry()
+
+  const positions = new Float32Array(amount * 3)
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('pOpacity', new THREE.BufferAttribute(new Float32Array(amount), 1));
+  geo.setAttribute('pSize', new THREE.BufferAttribute(new Float32Array(amount), 1));
+  geo.setAttribute('pColor', new THREE.BufferAttribute(new Float32Array(amount), 1));
+
+  var vertex = new THREE.Vector3();
+  for (var i = 0; i < amount; i++) {
+
+    vertex.x = (Math.random() * 2 - 1);
+    vertex.y = (Math.random() * 2 - 1);
+    vertex.z = (Math.random() * 2 - 1);
+    vertex.toArray(positions, i * 3);
+
+  }
+
   const mat = new THREE.ShaderMaterial({
     uniforms: {
       time: {
@@ -52,6 +72,9 @@ const initStars = () => {
   const stars = new THREE.Points(geo, mat);
 
   scene.add(stars)
+
+
+  render()
 
 
 }
