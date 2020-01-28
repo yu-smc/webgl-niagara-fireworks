@@ -90,11 +90,10 @@
 /*!*************************!*\
   !*** ./src/js/entry.js ***!
   \*************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _modules_shaders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/shaders */ \"./src/js/modules/shaders.js\");\n\nvar stage = document.getElementById('stage');\nvar scene;\nvar camera;\nvar renderer;\n\nvar init = function init() {\n  scene = new THREE.Scene();\n  renderer = new THREE.WebGLRenderer();\n  renderer.setClearColor(0x001738);\n  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);\n  camera.position.set(0, 0, 10);\n  onResize();\n  stage.appendChild(renderer.domElement);\n  initStars();\n  render();\n};\n\nvar onResize = function onResize() {\n  var width = window.innerWidth;\n  var height = window.innerHeight;\n  renderer.setPixelRatio(window.devicePixelRatio);\n  renderer.setSize(width, height);\n  camera.aspect = width / height;\n  camera.updateProjectionMatrix();\n};\n\nvar initStars = function initStars() {\n  var geo = new THREE.BufferGeometry();\n  var mat = new THREE.ShaderMaterial({\n    uniforms: {\n      time: {\n        type: \"f\",\n        value: 0.0\n      }\n    },\n    vertexShader: _modules_shaders__WEBPACK_IMPORTED_MODULE_0__[\"vShader\"],\n    fragmentShader: _modules_shaders__WEBPACK_IMPORTED_MODULE_0__[\"fShader\"],\n    depthWrite: false,\n    transparent: true,\n    alphaTest: 0.5\n  });\n};\n\nvar render = function render() {\n  animate();\n  renderer.render(scene, camera);\n  requestAnimationFrame(render);\n};\n\nvar animate = function animate() {//main logic\n};\n\nwindow.onload = function () {\n  init();\n};\n\nwindow.addEventListener('resize', onResize);\n\n//# sourceURL=webpack:///./src/js/entry.js?");
+eval("var Shader = __webpack_require__(/*! ./modules/shaders */ \"./src/js/modules/shaders.js\");\n\nvar stage = document.getElementById('stage');\nvar scene;\nvar camera;\nvar renderer;\n\nvar init = function init() {\n  scene = new THREE.Scene();\n  renderer = new THREE.WebGLRenderer();\n  renderer.setClearColor(0x001738);\n  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);\n  camera.position.set(0, 0, 10);\n  onResize();\n  stage.appendChild(renderer.domElement);\n  initStars();\n  render();\n};\n\nvar onResize = function onResize() {\n  var width = window.innerWidth;\n  var height = window.innerHeight;\n  renderer.setPixelRatio(window.devicePixelRatio);\n  renderer.setSize(width, height);\n  camera.aspect = width / height;\n  camera.updateProjectionMatrix();\n};\n\nvar initStars = function initStars() {\n  var geo = new THREE.BufferGeometry();\n  var mat = new THREE.ShaderMaterial({\n    uniforms: {\n      time: {\n        type: \"f\",\n        value: 0.0\n      }\n    },\n    vertexShader: Shader.vertex,\n    fragmentShader: Shader.fragment,\n    depthWrite: false,\n    transparent: true,\n    alphaTest: 0.5\n  });\n  var stars = new THREE.THREE.Points(geo, mat);\n  scene.add(stars);\n};\n\nvar render = function render() {\n  animate();\n  renderer.render(scene, camera);\n  requestAnimationFrame(render);\n};\n\nvar animate = function animate() {//main logic\n};\n\nwindow.onload = function () {\n  init();\n};\n\nwindow.addEventListener('resize', onResize);\n\n//# sourceURL=webpack:///./src/js/entry.js?");
 
 /***/ }),
 
@@ -106,7 +105,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _mod
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  vShader: \"\",\n  fShader: \"\"\n});\n\n//# sourceURL=webpack:///./src/js/modules/shaders.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  vertex: \"\",\n  fragment: \"\"\n});\n\n//# sourceURL=webpack:///./src/js/modules/shaders.js?");
 
 /***/ })
 

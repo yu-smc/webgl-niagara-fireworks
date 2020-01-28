@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm-run-all dev:** && npm-run-all -p dev:watch:**",
+    "dev": "run-p dev:**",
     "dev:clean": "rimraf ./public/**",
-    "dev:js": "webpack",
-    "dev:pug": "pug \"./src/pug/index.pug\" --out ./public/",
+    "dev:pug": "pug \"./src/pug/index.pug\" --out ./public/ --watch",
     "dev:scss": "node-sass ./src/scss/style.scss ./public/style.css",
-    "dev:watch:browse": "browser-sync start --server \"./public\" --https true --watch --files \"./src/**\"",
-    "dev:watch:js": "onchange \"./src/js/**/*.js\" -- npm run dev:js"
+    "dev:js": "webpack",
+    "dev:watchjs": "onchange \"./src/js/**/*.js\" -- npm run dev:js",
+    "dev:browse": "browser-sync start --server \"./public\" --https true --watch --files \"./public/**\""
+
   },
   "repository": {
     "type": "git",

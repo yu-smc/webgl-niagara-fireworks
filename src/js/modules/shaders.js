@@ -1,4 +1,4 @@
 export default {
-  vShader: ``,
-  fShader: ``
+  vertex: ``,
+  fragment: ``
 }

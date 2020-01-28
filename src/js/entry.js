@@ -1,7 +1,4 @@
-import {
-  vShader,
-  fShader
-} from './modules/shaders'
+const Shader = require('./modules/shaders')
 
 
 const stage = document.getElementById('stage')
@@ -45,8 +42,8 @@ const initStars = () => {
         value: 0.0
       },
     },
-    vertexShader: vShader,
-    fragmentShader: fShader,
+    vertexShader: Shader.vertex,
+    fragmentShader: Shader.fragment,
     depthWrite: false,
     transparent: true,
     alphaTest: 0.5,
