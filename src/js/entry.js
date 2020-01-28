@@ -49,7 +49,7 @@ const initStars = () => {
     alphaTest: 0.5,
   });
 
-  const stars = new THREE.THREE.Points(geo, mat);
+  const stars = new THREE.Points(geo, mat);
 
   scene.add(stars)
 
