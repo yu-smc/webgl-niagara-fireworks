@@ -13,9 +13,9 @@ let renderer
 const init = () => {
   scene = new THREE.Scene()
   renderer = new THREE.WebGLRenderer()
-  renderer.setClearColor(0x001738);
+  renderer.setClearColor(0x001222);
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
-  camera.position.set(0, 0, 10)
+  camera.position.set(0, 0, 1)
   onResize()
 
   stage.appendChild(renderer.domElement)
@@ -61,6 +61,9 @@ const initStars = () => {
         type: "f",
         value: 0.0
       },
+      resolution: {
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+      }
     },
     vertexShader: Shader.vertex,
     fragmentShader: Shader.fragment,
