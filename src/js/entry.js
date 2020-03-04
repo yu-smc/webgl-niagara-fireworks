@@ -8,6 +8,12 @@ let scene;
 let camera;
 let renderer
 
+let stars;
+
+const starsAmount = 600;
+const starsVelo = []
+
+
 
 
 const init = () => {
@@ -48,9 +54,9 @@ const initStars = () => {
   var vertex = new THREE.Vector3();
   for (var i = 0; i < amount; i++) {
 
-    vertex.x = (Math.random() * 2 - 1);
-    vertex.y = (Math.random() * 2 - 1);
-    vertex.z = (Math.random() * 2 - 1);
+    vertex.x = (Math.random() * 3 - 1.5);
+    vertex.y = (Math.random() * 3 - 1.5);
+    vertex.z = (Math.random() * 3 - 1.5);
     vertex.toArray(positions, i * 3);
 
   }
@@ -72,14 +78,18 @@ const initStars = () => {
     alphaTest: 0.5,
   });
 
-  const stars = new THREE.Points(geo, mat);
+  stars = new THREE.Points(geo, mat);
 
   scene.add(stars)
 
+  for (let i = 0; i < starsAmount; i++) {
+    const rn = Math.random() * 0.002 - 0.001
+    starsVelo[i] = rn
+  }
+
+  console.log(starsVelo)
 
   render()
-
-
 }
 
 const render = () => {
@@ -88,8 +98,34 @@ const render = () => {
   requestAnimationFrame(render)
 }
 
+const changeStarsPos = () => {
+  const posArr = stars.geometry.attributes.position.array
+
+  for (let i = 0; i < posArr.length; i++) {
+    if (1 < posArr[i * 3] && 0 < starsVelo[i * 3]) {
+      starsVelo[i * 3] = Math.random() * -0.001
+    }
+    if (posArr[i * 3] < -1 && starsVelo[i * 3] < 0) {
+      starsVelo[i * 3] = Math.random() * 0.001
+    }
+    if (1 < posArr[i * 3 + 1] && 0 < starsVelo[i * 3 + 1]) {
+      starsVelo[i * 3 + 1] = Math.random() * -0.001
+    }
+    if (posArr[i * 3 + 1] < -1 && starsVelo[i * 3 + 1] < 0) {
+      starsVelo[i * 3 + 1] = Math.random() * 0.001
+    }
+    posArr[i * 3] += starsVelo[i * 3];
+    posArr[i * 3 + 1] += starsVelo[i * 3 + 1];
+    posArr[i * 3 + 2] += starsVelo[i * 3 + 2];
+  }
+
+  console.log(posArr[1])
+
+  stars.geometry.attributes.position.needsUpdate = true;
+}
+
 const animate = () => {
-  //main logic
+  changeStarsPos()
 }
 
 window.onload = () => {
