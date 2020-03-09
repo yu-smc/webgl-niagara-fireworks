@@ -21,7 +21,7 @@ export default {
     precision mediump float;
 
     varying vec2 vUv;
-    // varying float vOpacity;
+    varying float vOpacity;
     // varying float vColor;
 
     uniform vec2 resolution;
@@ -29,7 +29,7 @@ export default {
     void main() {
       float dist = distance(vec2(gl_PointCoord.x, gl_PointCoord.y), vec2(0.5, 0.5));
 
-      vec4 baseColor = vec4(1., 1., 1., 0.04 / dist - dist * 0.2);
+      vec4 baseColor = vec4(1., 1., 1., (0.04 / dist - dist * 0.2) * vOpacity);
 
       gl_FragColor = baseColor;
 
