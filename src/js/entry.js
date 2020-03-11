@@ -1,4 +1,5 @@
 import Shader from './modules/shaders'
+import Calc from './modules/calc-utils'
 
 console.log(Shader.fragment)
 
@@ -10,9 +11,20 @@ let renderer
 
 let stars;
 
-const starsAmount = 300;
+const starsAmount = 900;
 const starsVelo = []
 const collisionPoints = []
+
+const btn = document.getElementById("btn-launch")
+
+let renderStartTime;
+
+const visibleFlags = new Float32Array(starsAmount)
+
+btn.addEventListener('click', () => {
+  render()
+  renderStartTime = performance.now()
+})
 
 
 
@@ -29,7 +41,7 @@ const init = () => {
   stage.appendChild(renderer.domElement)
 
   initStars();
-  render();
+  renderForWaiting()
 }
 
 const onResize = () => {
@@ -44,27 +56,38 @@ const onResize = () => {
 }
 
 const initStars = () => {
-  var amount = 300
 
-  var positions = new Float32Array(amount * 3);
-  var pOpacities = new Float32Array(amount * 3);
-  var pSizes = new Float32Array(amount * 3);
-  var pColors = new Float32Array(amount * 3);
+  var positions = new Float32Array(starsAmount * 3);
+  var pOpacities = new Float32Array(starsAmount);
+  var pSizes = new Float32Array(starsAmount);
+  var pColors = new Float32Array(starsAmount);
 
 
   var vertex = new THREE.Vector3();
 
-  for (var i = 0; i < amount; i++) {
+  for (var i = 0; i < starsAmount; i++) {
 
-    vertex.x = (Math.random() * 2 - 1);
-    vertex.y = (Math.random() * 2 - 1);
-    vertex.z = (Math.random() * 2 - 1);
-    vertex.toArray(positions, i * 3);
+    if (i < starsAmount / 2) {
+      vertex.x = (i / 100) - starsAmount / 2 / 100;
+      vertex.y = Calc.getEaseOutPos(i, 1.5, -0.3, starsAmount / 2);
+      vertex.z = 0.5
+      vertex.toArray(positions, i * 3);
+    } else {
+      vertex.x = (i - starsAmount / 2) / 100;
+      vertex.y = Calc.getEaseInPos(i - starsAmount / 2, 1.2, 0.3, starsAmount / 2);
+      vertex.z = 0.5
+      vertex.toArray(positions, i * 3);
+    }
+
+
+
+
 
 
   }
 
-  console.log(positions)
+
+  console.log(pOpacities)
 
 
   // const positions = new Float32Array(starsAmount * 3)
@@ -124,8 +147,10 @@ const initStars = () => {
     opa = 1.0
   })
 
+}
 
-  render()
+const renderForWaiting = () => {
+  renderer.render(scene, camera)
 }
 
 const render = () => {
@@ -134,43 +159,46 @@ const render = () => {
   requestAnimationFrame(render)
 }
 
-const changeStarsPos = () => {
+const handleOpacity = (opaArr, id, timePast) => {
+  if (visibleFlags[id] === 0 && id < timePast / 60) {
+    visibleFlags[id] = 1
+    visibleFlags[starsAmount - id] = 1
+  }
+  if (visibleFlags[id] === 0) {
+    return;
+  } else {
+    if (Math.random() < 0.1) {
+      opaArr[id] -= 0.4
+    }
+    if (opaArr[id] < 0.3) {
+      opaArr[id] = 1.0
+    }
+  }
+
+}
+
+const animate = () => {
   const posArr = stars.geometry.attributes.position.array
   const opaArr = stars.geometry.attributes.pOpacity.array
+  const timePast = performance.now() - renderStartTime;
 
   for (let i = 0; i < posArr.length; i++) {
-    //position
-    if (1 < posArr[i * 3] && 0 < starsVelo[i * 3]) {
-      starsVelo[i * 3] = Math.random() * -0.001
-    }
-    if (posArr[i * 3] < -1 && starsVelo[i * 3] < 0) {
-      starsVelo[i * 3] = Math.random() * 0.001
-    }
-    if (1 < posArr[i * 3 + 1] && 0 < starsVelo[i * 3 + 1]) {
-      starsVelo[i * 3 + 1] = Math.random() * -0.001
-    }
-    if (posArr[i * 3 + 1] < -1 && starsVelo[i * 3 + 1] < 0) {
-      starsVelo[i * 3 + 1] = Math.random() * 0.001
-    }
-    // posArr[i * 3] += starsVelo[i * 3];
-    // posArr[i * 3 + 1] += starsVelo[i * 3 + 1];
 
+
+
+
+  }
+  for (let i = 0; i < opaArr.length; i++) {
     //opacity
-    if (Math.random() < 0.1) {
-      opaArr[i] -= 0.4
-    }
-    if (opaArr[i] < 0.3) {
-      opaArr[i] = 1.0
-    }
+
+
+    handleOpacity(opaArr, i, timePast)
+
   }
 
 
   stars.geometry.attributes.position.needsUpdate = true;
   stars.geometry.attributes.pOpacity.needsUpdate = true;
-}
-
-const animate = () => {
-  changeStarsPos()
 }
 
 window.onload = () => {
