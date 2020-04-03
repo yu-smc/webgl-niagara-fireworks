@@ -13,7 +13,7 @@ export default {
       vOpacity = pOpacity;
       vColor = pColor;
     
-      gl_PointSize = 40.0;
+      gl_PointSize = 45.0;
       gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     }
   `,
@@ -29,7 +29,7 @@ export default {
     void main() {
       float dist = distance(vec2(gl_PointCoord.x, gl_PointCoord.y), vec2(0.5, 0.5));
 
-      vec4 baseColor = vec4(vColor, (0.04 / dist - dist * 0.2) * vOpacity);
+      vec4 baseColor = vec4(vColor, (0.02 / dist - dist * 0.4) * vOpacity);
 
       gl_FragColor = baseColor;
 

@@ -11,9 +11,9 @@ let renderer
 
 let stars;
 
-const starsAmount = 900;
-const starsVelo = []
-const collisionPoints = []
+const starsAmount = 5000;
+let timers = []
+let veloYs = []
 
 const btn = document.getElementById("btn-launch")
 
@@ -31,16 +31,23 @@ btn.addEventListener('click', () => {
 
 
 const init = () => {
+  for (let i = 0; i < starsAmount; i++) {
+    timers.push(Math.random() * (120000 - 30000) + 30000)
+    veloYs.push(Math.random() * (0.004 - 0.001) + 0.001)
+  }
+
   scene = new THREE.Scene()
   renderer = new THREE.WebGLRenderer()
   renderer.setClearColor(0x000F1C);
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
-  camera.position.set(0, 0, 5)
+  camera.position.set(0, 0, 12)
   onResize()
 
   stage.appendChild(renderer.domElement)
 
   initStars();
+
+
   renderForWaiting()
 }
 
@@ -70,27 +77,27 @@ const initStars = () => {
   for (var i = 0; i < starsAmount; i++) {
 
     if (i < starsAmount / 2) {
-      vertex.x = (i / 100) - starsAmount / 2 / 100;
-      vertex.y = Calc.getEaseOutPos(i, 1.5, -0.3, starsAmount / 2);
-      vertex.z = Math.random() * (0.6 - 0.45) + (0.45)
+      vertex.x = (i / 250) - starsAmount / 2 / 250;
+      vertex.y = Calc.getEaseOutPos(i, 3, -0.3, starsAmount / 2);
+      vertex.z = Math.random() * (0.5 - 0.45) + (0.45)
       vertex.toArray(positions, i * 3);
     } else {
-      vertex.x = (i - starsAmount / 2) / 100;
-      vertex.y = Calc.getEaseInPos(i - starsAmount / 2, 1.2, 0.3, starsAmount / 2);
-      vertex.z = Math.random() * (0.6 - 0.45) + (0.45)
+      vertex.x = (i - starsAmount / 2) / 250;
+      vertex.y = Calc.getEaseInPos(i - starsAmount / 2, 2.7, 0.3, starsAmount / 2);
+      vertex.z = Math.random() * (0.5 - 0.45) + (0.45)
       vertex.toArray(positions, i * 3);
     }
 
-    if (vertex.z < 0.5) {
-      console.log("a")
-      color.setRGB(0.97, 0.91, 0.84)
-    } else if (0.5 <= vertex.z && vertex.z < 0.55) {
-      console.log("b")
-      color.setRGB(1, 0.91, 0.24)
+    const colorDiv = Math.random()
+
+    if (colorDiv < 0.33) {
+      color.setRGB(0.9, 0.7, 0)
+    } else if (0.33 <= colorDiv && colorDiv < 0.66) {
+      color.setRGB(1, 0.8, 0.6)
     } else {
-      console.log("c")
-      color.setRGB(0.9, 0, 0)
+      color.setRGB(1, 1, 0.8)
     }
+
 
     color.toArray(pColors, i * 3)
 
@@ -144,7 +151,9 @@ const render = () => {
 }
 
 const handleOpacity = (opaArr, id, timePast) => {
-  if (visibleFlags[id] === 0 && id < timePast / 60) {
+  if (visibleFlags[id] === 0 && id < timePast / 12) {
+    //点火してる風にみせる
+    if (Math.random() < 0.996) return
     visibleFlags[id] = 1
     visibleFlags[starsAmount - id] = 1
   }
@@ -158,31 +167,51 @@ const handleOpacity = (opaArr, id, timePast) => {
       opaArr[id] = 1.0
     }
   }
+}
 
+const handlePosY = (posArr, i, timePast) => {
+  //はしっこから落とすための調整
+  const modTimer = timers[i] - Math.abs(posArr[i * 3]) * 1500;
+  if (modTimer <= timePast) {
+    posArr[i * 3 + 1] -= veloYs[i]
+  }
+}
+
+
+const handleColor = (colArr, i, timePast, posArr) => {
+  const modTimer = timers[i] - Math.abs(posArr[i * 3]) * 1000;
+  if (modTimer <= timePast) return;
+
+  if (52000 < timePast) {
+    colArr[i * 3] -= 0.005
+    colArr[i * 3 + 1] += 0.005
+    colArr[i * 3 + 2] += 0.0001
+  }
+
+}
+
+const hideIfGoaled = (posArr, opaArr, i) => {
+  if (posArr[i * 3 + 1] < -1) {
+    opaArr[i] = 0;
+  }
 }
 
 const animate = () => {
   const posArr = stars.geometry.attributes.position.array
   const opaArr = stars.geometry.attributes.pOpacity.array
+  const colArr = stars.geometry.attributes.pColor.array
   const timePast = performance.now() - renderStartTime;
 
-  for (let i = 0; i < posArr.length; i++) {
-
-
-
-
-  }
-  for (let i = 0; i < opaArr.length; i++) {
-    //opacity
-
-
+  for (let i = 0; i < starsAmount; i++) {
     handleOpacity(opaArr, i, timePast)
-
+    handlePosY(posArr, i, timePast)
+    handleColor(colArr, i, timePast, posArr)
+    hideIfGoaled(posArr, opaArr, i)
   }
-
 
   stars.geometry.attributes.position.needsUpdate = true;
   stars.geometry.attributes.pOpacity.needsUpdate = true;
+  stars.geometry.attributes.pColor.needsUpdate = true;
 }
 
 window.onload = () => {
