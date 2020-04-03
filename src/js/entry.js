@@ -72,24 +72,24 @@ const initStars = () => {
     if (i < starsAmount / 2) {
       vertex.x = (i / 100) - starsAmount / 2 / 100;
       vertex.y = Calc.getEaseOutPos(i, 1.5, -0.3, starsAmount / 2);
-      vertex.z = Math.random() * (0.7 - 0.4) + (0.4)
+      vertex.z = Math.random() * (0.6 - 0.45) + (0.45)
       vertex.toArray(positions, i * 3);
     } else {
       vertex.x = (i - starsAmount / 2) / 100;
       vertex.y = Calc.getEaseInPos(i - starsAmount / 2, 1.2, 0.3, starsAmount / 2);
-      vertex.z = Math.random() * (0.7 - 0.4) + (0.4)
+      vertex.z = Math.random() * (0.6 - 0.45) + (0.45)
       vertex.toArray(positions, i * 3);
     }
 
     if (vertex.z < 0.5) {
       console.log("a")
-      color.setRGB(1, 1, 1)
-    } else if (0.5 <= vertex.z && vertex.z < 0.6) {
+      color.setRGB(0.97, 0.91, 0.84)
+    } else if (0.5 <= vertex.z && vertex.z < 0.55) {
       console.log("b")
       color.setRGB(1, 0.91, 0.24)
     } else {
       console.log("c")
-      color.setRGB(0, 1, 0.9)
+      color.setRGB(0.9, 0, 0)
     }
 
     color.toArray(pColors, i * 3)
