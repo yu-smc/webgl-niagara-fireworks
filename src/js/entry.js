@@ -60,66 +60,50 @@ const initStars = () => {
   var positions = new Float32Array(starsAmount * 3);
   var pOpacities = new Float32Array(starsAmount);
   var pSizes = new Float32Array(starsAmount);
-  var pColors = new Float32Array(starsAmount);
+  var pColors = new Float32Array(starsAmount * 3);
 
 
   var vertex = new THREE.Vector3();
+  var color = new THREE.Color(0xffffff)
+
 
   for (var i = 0; i < starsAmount; i++) {
 
     if (i < starsAmount / 2) {
       vertex.x = (i / 100) - starsAmount / 2 / 100;
       vertex.y = Calc.getEaseOutPos(i, 1.5, -0.3, starsAmount / 2);
-      vertex.z = 0.5
+      vertex.z = Math.random() * (0.7 - 0.4) + (0.4)
       vertex.toArray(positions, i * 3);
     } else {
       vertex.x = (i - starsAmount / 2) / 100;
       vertex.y = Calc.getEaseInPos(i - starsAmount / 2, 1.2, 0.3, starsAmount / 2);
-      vertex.z = 0.5
+      vertex.z = Math.random() * (0.7 - 0.4) + (0.4)
       vertex.toArray(positions, i * 3);
     }
 
+    if (vertex.z < 0.5) {
+      console.log("a")
+      color.setRGB(1, 1, 1)
+    } else if (0.5 <= vertex.z && vertex.z < 0.6) {
+      console.log("b")
+      color.setRGB(1, 0.91, 0.24)
+    } else {
+      console.log("c")
+      color.setRGB(0, 1, 0.9)
+    }
 
-
-
-
+    color.toArray(pColors, i * 3)
 
   }
 
-
-  console.log(pOpacities)
-
-
-  // const positions = new Float32Array(starsAmount * 3)
-
-  // var vertex = new THREE.Vector3();
-  // for (var i = 0; i < starsAmount; i++) {
-
-  //   vertex.x = (Math.random() * 2.0 - 1.0);
-  //   vertex.y = (Math.random() * 2.0 - 1.0);
-  //   vertex.z = 0.0;
-  //   vertex.toArray(positions, i * 3);
-
-
-  //   if (i == 20) {
-  //     
-  //   }
-
-  //   if (i < starsAmount * 2 / 3) {
-  //     const rn = Math.random() * 0.001 - 0.0005
-  //     starsVelo[i] = rn
-  //   }
-  // }
-
+  console.log(pColors)
 
   const geo = new THREE.BufferGeometry()
 
   geo.addAttribute('position', new THREE.BufferAttribute(positions, 3));
   geo.addAttribute('pOpacity', new THREE.BufferAttribute(pOpacities, 1));
   geo.addAttribute('pSize', new THREE.BufferAttribute(pSizes, 1));
-  geo.addAttribute('pColor', new THREE.BufferAttribute(pColors, 1));
-
-
+  geo.addAttribute('pColor', new THREE.BufferAttribute(pColors, 3));
 
   const mat = new THREE.ShaderMaterial({
     uniforms: {

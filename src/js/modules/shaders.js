@@ -2,11 +2,11 @@ export default {
   vertex: `
     attribute float pOpacity;
     attribute float pSize;
-    attribute float pColor;
+    attribute vec3 pColor;
     
     varying vec2 vUv;
     varying float vOpacity;
-    varying float vColor;
+    varying vec3 vColor;
     
     void main() {
       vUv = uv;
@@ -22,14 +22,14 @@ export default {
 
     varying vec2 vUv;
     varying float vOpacity;
-    // varying float vColor;
+    varying vec3 vColor;
 
     uniform vec2 resolution;
     
     void main() {
       float dist = distance(vec2(gl_PointCoord.x, gl_PointCoord.y), vec2(0.5, 0.5));
 
-      vec4 baseColor = vec4(1., 1., 1., (0.04 / dist - dist * 0.2) * vOpacity);
+      vec4 baseColor = vec4(vColor, (0.04 / dist - dist * 0.2) * vOpacity);
 
       gl_FragColor = baseColor;
 
