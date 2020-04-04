@@ -4,7 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    title Drifting Stars | Ajitama
+    title Niagara Falls Fireworks | Ajitama
     link(rel="stylesheet" href="./style.css")
   body
     #stage
@@ -16,6 +16,20 @@ html(lang="en")
       .soundButtons
         #btn-launch-sound-off.soundButtons_off SOUND OFF
         #btn-launch-sound-on.soundButtons_on SOUND ON
+    #rotateScreen
+      .messages
+        p.messages_en Landscape screen is recommended for this content. If you are using a smartphone, please rotate it and reload the browser.
+        p.messages_ja このコンテンツは横画面での閲覧が推奨されています。スマートフォンの場合は横画面にしてからページを再読み込みしてください。
+    #helpBtn ?
+    #helpModal
+      .desc
+        p This Web-Artwork depicts "Niagara Falls Fireworks", that you can see at some of firework displays(see the website below for details)
+        a(href="https://rurubu.jp/andmore/article/2808" target="_blank") https://rurubu.jp/andmore/article/2808
+      .info
+        p Author: Ajitama
+        p BGM: Ajitama
+        p Ambient sound: 音々亭(free sources)
+        p Used libraries: Three.js, Howler.js
     script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.3/howler.core.min.js")
     script(src="./bundle.js")

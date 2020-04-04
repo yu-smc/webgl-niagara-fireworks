@@ -128,4 +128,69 @@ body {
     #ui .soundButtons_off, #ui .soundButtons_on {
       padding: 4px 10px;
       border: solid 2px white;
-      border-radius: 6px; }
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .5s ease; }
+      #ui .soundButtons_off:hover, #ui .soundButtons_on:hover {
+        color: #00FFAF;
+        border-color: #00FFAF; }
+
+#rotateScreen {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: white;
+  text-align: center;
+  background: linear-gradient(#000B13, #00182D);
+  z-index: 10000; }
+  #rotateScreen .messages {
+    padding: 20px;
+    position: absolute;
+    top: 30vh; }
+    #rotateScreen .messages_en {
+      font-size: 1.2rem; }
+    #rotateScreen .messages_ja {
+      margin-top: 20px;
+      font-size: 0.8rem; }
+
+#rotateScreen.active {
+  display: block; }
+
+#helpBtn {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 2vh;
+  right: 2vh;
+  color: white;
+  border: solid 2px white;
+  text-align: center;
+  line-height: 36px;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  cursor: pointer; }
+
+#helpModal.active {
+  display: block; }
+
+#helpModal {
+  display: none;
+  position: absolute;
+  top: 15vh;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.9);
+  width: 500px;
+  height: 65vh;
+  color: white;
+  padding: 5vh 20px;
+  z-index: 100000;
+  overflow: scroll; }
+  #helpModal .desc > a {
+    color: white; }
+  #helpModal .info {
+    margin-top: 5vh; }

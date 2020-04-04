@@ -7,6 +7,9 @@ const btnSoundOn = document.getElementById("btn-launch-sound-on")
 const btnSoundOff = document.getElementById("btn-launch-sound-off")
 const loadingScreen = document.getElementById('loadingScreen')
 const ui = document.getElementById('ui')
+const rotateScreen = document.getElementById('rotateScreen')
+const helpBtn = document.getElementById('helpBtn')
+const helpModal = document.getElementById('helpModal')
 
 const starsAmount = 5000;
 const status = {
@@ -39,7 +42,7 @@ sound.once('load', function () {
 const playSound = () => {
   setTimeout(() => {
     sound.play()
-  }, 2000)
+  }, 3500)
 }
 
 const hideUi = () => {
@@ -73,7 +76,7 @@ const reset = () => {
 
 const setEndTimer = () => {
   setTimeout(
-    reset, 100000)
+    reset, 95000)
 }
 
 const start = () => {
@@ -289,7 +292,6 @@ const handlePosY = (posArr, i, timePast) => {
   }
 }
 
-
 const handleColor = (colArr, i, timePast, posArr) => {
   const modTimer = timers[i] - Math.abs(posArr[i * 3]) * 1000;
   if (modTimer <= timePast) return;
@@ -326,9 +328,29 @@ const animate = () => {
   stars.geometry.attributes.pColor.needsUpdate = true;
 }
 
+const checkBrowserState = () => {
+  if (window.innerWidth < window.innerHeight) {
+    rotateScreen.classList.add('active')
+  } else {
+    rotateScreen.classList.remove('active')
+  }
+}
+
 window.onload = () => {
   loadingScreen.classList.remove('active')
+  checkBrowserState()
   init()
 }
 
-window.addEventListener('resize', onResize);
+window.addEventListener('resize', () => {
+  checkBrowserState();
+  onResize()
+});
+
+helpBtn.addEventListener('click', () => {
+  if (helpModal.classList[0] == "active") {
+    helpModal.classList.remove("active")
+  } else {
+    helpModal.classList.add("active")
+  }
+})
