@@ -7,7 +7,15 @@ html(lang="en")
     title Drifting Stars | Ajitama
     link(rel="stylesheet" href="./style.css")
   body
-    #stage.stage
-      .btn-launch#btn-launch FIRE
+    #stage
+    #loadingScreen.active
+      p LOADING...
+    #ui.active
+      h1.title Niagara Falls Fireworks
+      p.msg Choose sound on/off to start.
+      .soundButtons
+        #btn-launch-sound-off.soundButtons_off SOUND OFF
+        #btn-launch-sound-on.soundButtons_on SOUND ON
     script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.3/howler.core.min.js")
     script(src="./bundle.js")

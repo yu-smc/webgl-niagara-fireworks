@@ -1,54 +1,138 @@
 import Shader from './modules/shaders'
 import Calc from './modules/calc-utils'
+import OrbitControls from './modules/OrbitControls'
 
-console.log(Shader.fragment)
 
+const btnSoundOn = document.getElementById("btn-launch-sound-on")
+const btnSoundOff = document.getElementById("btn-launch-sound-off")
+const loadingScreen = document.getElementById('loadingScreen')
+const ui = document.getElementById('ui')
 
+const starsAmount = 5000;
+const status = {
+  isPlaying: false
+}
 const stage = document.getElementById('stage')
+
 let scene;
 let camera;
 let renderer
-
+let control;
 let stars;
-
-const starsAmount = 5000;
-let timers = []
-let veloYs = []
-
-const btn = document.getElementById("btn-launch")
-
+let timers;
+let veloYs;
 let renderStartTime;
+let visibleFlags
 
-const visibleFlags = new Float32Array(starsAmount)
+//sound関連の読み込みと初期化
+var sound = new Howl({
+  src: ['./statics/sound/Niagara.mp3'],
+  loop: false
+});
 
-btn.addEventListener('click', () => {
+let isSoundLoaded = false
+sound.once('load', function () {
+  sound.volume(0.3)
+  isSoundLoaded = true
+});
+
+const playSound = () => {
+  setTimeout(() => {
+    sound.play()
+  }, 2000)
+}
+
+const hideUi = () => {
+  ui.classList.remove('active')
+}
+
+//演出終了後の初期化
+const reset = () => {
+
+  scene.children.forEach(child => {
+    child.geometry.dispose()
+    child.material.dispose()
+  })
+  scene.children = []
+  scene.dispose()
+  scene = undefined
+  renderer = undefined
+  camera = undefined
+  control = undefined
+  timers = undefined
+  veloYs = undefined
+  renderStartTime = undefined
+  visibleFlags = undefined
+
+  ui.classList.add('active')
+
+  init()
+  status.isPlaying = false;
+}
+
+
+const setEndTimer = () => {
+  setTimeout(
+    reset, 100000)
+}
+
+const start = () => {
+  status.isPlaying = true;
   render()
+  setEndTimer()
   renderStartTime = performance.now()
+}
+
+//トリガー
+btnSoundOn.addEventListener('click', () => {
+  hideUi()
+  setTimeout(() => {
+    start()
+    playSound()
+  }, 1500)
+
+})
+btnSoundOff.addEventListener('click', () => {
+  hideUi()
+  setTimeout(() => {
+    start()
+  }, 1500)
 })
 
 
 
-
-
 const init = () => {
+  visibleFlags = new Float32Array(starsAmount)
+
+  timers = []
+  veloYs = []
   for (let i = 0; i < starsAmount; i++) {
-    timers.push(Math.random() * (120000 - 30000) + 30000)
+    timers.push(Math.random() * (90000 - 30000) + 30000)
     veloYs.push(Math.random() * (0.004 - 0.001) + 0.001)
   }
 
   scene = new THREE.Scene()
-  renderer = new THREE.WebGLRenderer()
-  renderer.setClearColor(0x000F1C);
+  renderer = new THREE.WebGLRenderer({
+    alpha: true
+  })
+  // renderer.setClearColor(0x00192E);
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
-  camera.position.set(0, 0, 12)
+  camera.position.set(0, 0, 14)
   onResize()
 
+  if (stage.lastChild) {
+    stage.removeChild(stage.lastChild)
+  }
   stage.appendChild(renderer.domElement)
 
   initStars();
+  initClanes();
+
+  control = new THREE.OrbitControls(camera, renderer.domElement)
+  control.autoRotate = true;
+  control.autoRotateSpeed = 0.3;
 
 
-  renderForWaiting()
 }
 
 const onResize = () => {
@@ -103,8 +187,6 @@ const initStars = () => {
 
   }
 
-  console.log(pColors)
-
   const geo = new THREE.BufferGeometry()
 
   geo.addAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -130,21 +212,51 @@ const initStars = () => {
   });
 
   stars = new THREE.Points(geo, mat);
-  console.log(stars)
   scene.add(stars)
 
   const opaArr = stars.geometry.attributes.pOpacity.array
   opaArr.forEach(opa => {
     opa = 1.0
   })
-
 }
 
-const renderForWaiting = () => {
-  renderer.render(scene, camera)
+const initClanes = () => {
+  const geo1 = new THREE.Geometry()
+
+  geo1.vertices.push(new THREE.Vector3(10.2, 3, 0.5));
+  geo1.vertices.push(new THREE.Vector3(11, -1, 0.3));
+  geo1.vertices.push(new THREE.Vector3(11, -1, 0.7));
+  geo1.vertices.push(new THREE.Vector3(11.3, -1, 0.5));
+
+  geo1.faces.push(new THREE.Face3(0, 1, 2));
+  geo1.faces.push(new THREE.Face3(0, 2, 3));
+  geo1.faces.push(new THREE.Face3(0, 3, 1));
+  geo1.faces.push(new THREE.Face3(1, 3, 2));
+
+  const geo2 = new THREE.Geometry()
+
+  geo2.vertices.push(new THREE.Vector3(-10.2, 3, 0.5));
+  geo2.vertices.push(new THREE.Vector3(-11, -1, 0.3));
+  geo2.vertices.push(new THREE.Vector3(-11, -1, 0.7));
+  geo2.vertices.push(new THREE.Vector3(-11.3, -1, 0.5));
+
+  geo2.faces.push(new THREE.Face3(0, 1, 2));
+  geo2.faces.push(new THREE.Face3(0, 2, 3));
+  geo2.faces.push(new THREE.Face3(0, 3, 1));
+  geo2.faces.push(new THREE.Face3(1, 3, 2));
+
+  const mat = new THREE.MeshNormalMaterial();
+
+  const clane1 = new THREE.Mesh(geo1, mat);
+  scene.add(clane1);
+  const clane2 = new THREE.Mesh(geo2, mat);
+  scene.add(clane2);
 }
+
 
 const render = () => {
+  if (!status.isPlaying) return
+  control.update()
   animate()
   renderer.render(scene, camera)
   requestAnimationFrame(render)
@@ -182,7 +294,7 @@ const handleColor = (colArr, i, timePast, posArr) => {
   const modTimer = timers[i] - Math.abs(posArr[i * 3]) * 1000;
   if (modTimer <= timePast) return;
 
-  if (52000 < timePast) {
+  if (50000 < timePast) {
     colArr[i * 3] -= 0.005
     colArr[i * 3 + 1] += 0.005
     colArr[i * 3 + 2] += 0.0001
@@ -215,6 +327,7 @@ const animate = () => {
 }
 
 window.onload = () => {
+  loadingScreen.classList.remove('active')
   init()
 }
 

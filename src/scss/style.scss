@@ -82,6 +82,78 @@ th:not([align]) {
   text-align: left
 }
 
+body {
+  background: linear-gradient(#000B13, #00182D)
+}
+
 .btn-launch {
   background-color: white;
+}
+
+#loadingScreen {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(#000B13, #00182D);
+  transition: all .5s ease;
+  z-index: 100;
+}
+
+#loadingScreen.active {
+  // display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+
+#loadingScreen>p {
+  position: absolute;
+  top: 60vh;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  color: white;
+}
+
+#ui.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+#ui {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 34vh;
+  right: 0;
+  left: 0;
+  color: white;
+  text-align: center;
+  z-index: 10;
+  transition: all 1s ease;
+
+  .title {
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .soundButtons {
+    margin: 6vh auto;
+    width: 300px;
+    display: flex;
+    justify-content: space-around;
+
+    &_off,
+    &_on {
+      padding: 4px 10px;
+      border: solid 2px white;
+      border-radius: 6px;
+
+    }
+  }
 }

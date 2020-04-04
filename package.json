@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "run-p dev:**",
     "dev:clean": "rimraf ./public/**",
-    "dev:pug": "pug \"./src/pug/index.pug\" --out ./public/ --watch",
+    "dev:pug": "pug \"./src/pug/index.pug\" --out ./public/",
+    "dev:pugWatch": "pug \"./src/pug/index.pug\" --out ./public/ --watch",
     "dev:scss": "node-sass ./src/scss/style.scss ./public/style.css",
+    "dev:scssWatch": "node-sass ./src/scss/style.scss ./public/style.css --watch",
     "dev:js": "webpack",
     "dev:watchjs": "onchange \"./src/js/**/*.js\" -- npm run dev:js",
+    "dev:copy": "cpx \"./src/statics/**\" ./public/statics",
     "dev:browse": "browser-sync start --server \"./public\" --https true --watch --files \"./public/**\""
   },
   "repository": {
