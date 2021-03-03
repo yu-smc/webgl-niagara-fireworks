@@ -34,7 +34,7 @@
     "node-sass": "^4.13.1",
     "npm-run-all": "^4.1.5",
     "onchange": "^6.1.0",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "pug-cli": "^1.0.0-alpha6",
     "rimraf": "^3.0.0",
     "sass": "^1.25.0",
